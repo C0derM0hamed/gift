@@ -4,472 +4,257 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تهنئة رمضان المبارك</title>
-<style>
-    /* 1. تعريف الخط الأساسي (Normal Weight) */
-    @font-face {
-        font-family: 'RamadanFont'; /* اسم موحد للخط */
-        src: url('MOH-Regular.ttf') format('truetype');
-        font-weight: normal;
-        font-style: normal;
-    }
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-    /* 2. إجبار المتصفح يستخدم نفس الملف لما نطلب Bold (عشان يكون سميك زي الصورة) */
-    @font-face {
-        font-family: 'RamadanFont';
-        src: url('MOH-Regular.ttf') format('truetype');
-        font-weight: bold;
-        font-style: normal;
-    }
+    <style>
+        /* تعريف الخطوط كما طلبنا سابقاً */
+        @font-face {
+            font-family: 'RamadanFont';
+            src: url('MOH-Regular.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'RamadanFont';
+            src: url('MOH-Regular.ttf') format('truetype');
+            font-weight: bold;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'RamadanFont';
+            src: url('MOH-Regular.ttf') format('truetype');
+            font-weight: 700;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'RamadanFont';
+            src: url('MOH-Regular.ttf') format('truetype');
+            font-weight: 800;
+            font-style: normal;
+        }
 
-    @font-face {
-        font-family: 'RamadanFont';
-        src: url('MOH-Regular.ttf') format('truetype');
-        font-weight: 700; /* تعريف الوزن 700 بنفس الملف */
-        font-style: normal;
-    }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; min-height: 100vh; overflow-x: hidden; }
 
-    @font-face {
-        font-family: 'RamadanFont';
-        src: url('MOH-Regular.ttf') format('truetype');
-        font-weight: 800; /* تعريف الوزن 800 بنفس الملف لضمان السمك */
-        font-style: normal;
-    }
+        body {
+            font-family: 'RamadanFont', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            direction: rtl;
+            background-color: #1e514e;
+        }
 
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    html, body {
-        width: 100%;
-        min-height: 100vh;
-        overflow-x: hidden;
-    }
-
-    body {
-        /* استخدام الخط الموحد RamadanFont */
-        font-family: 'RamadanFont', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        direction: rtl;
-        background-color: #1e514e;
-    }
-
-    /* ===== INPUT OVERLAY ===== */
-    .input-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.6);
-        z-index: 1000;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        backdrop-filter: blur(5px);
-        transition: opacity 0.5s ease, visibility 0.5s ease;
-    }
-
-    .input-overlay.hidden {
-        opacity: 0;
-        visibility: hidden;
-        pointer-events: none;
-    }
-
-    .input-box {
-        background: #1f5e4b;
-        border: 2px solid rgba(143, 143, 80, 0.5);
-        border-radius: 20px;
-        padding: 50px 40px;
-        text-align: center;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-        max-width: 500px;
-        width: 90%;
-        animation: slideUp 0.6s ease-out;
-    }
-
-    .input-box h2 {
-        /* تأكيد استخدام الخط */
-        font-family: 'RamadanFont', sans-serif;
-        color: #fff;
-        font-size: clamp(18px, 3vw, 30px);
-        margin-bottom: 30px;
-        font-weight: bold;
-    }
-
-    .input-field {
-        font-family: 'RamadanFont', sans-serif;
-        width: 100%;
-        padding: 16px 20px;
-        font-size: 24px;
-        border: 2px solid rgba(143, 143, 80, 0.6);
-        border-radius: 12px;
-        text-align: center;
-        direction: rtl;
-        background: rgba(255, 255, 255, 0.1);
-        color: #fff;
-        transition: all 0.3s ease;
-        outline: none;
-        font-weight: bold; /* سمك الخط داخل الحقل */
-    }
-
-    .input-field::placeholder {
-        color: rgba(255, 255, 255, 0.5);
-        font-weight: normal;
-    }
-
-    .input-field:focus {
-        border-color: #8f8f50;
-        box-shadow: 0 0 15px rgba(143, 143, 80, 0.3);
-        background: rgba(255, 255, 255, 0.15);
-    }
-
-    .submit-btn {
-        font-family: 'RamadanFont', sans-serif;
-        margin-top: 20px;
-        padding: 16px 50px;
-        font-size: 24px;
-        background: #8f8f50;
-        color: #fff;
-        border: none;
-        border-radius: 12px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-weight: bold; /* سمك الخط في الزر */
-    }
-
-    .submit-btn:hover {
-        background: #a5a55e;
-        transform: translateY(-2px);
-        box-shadow: 0 5px 20px rgba(143, 143, 80, 0.4);
-    }
-
-    .error-message {
-        font-family: 'RamadanFont', sans-serif;
-        color: #ff8888;
-        font-size: 18px;
-        margin-top: 12px;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        height: 25px;
-    }
-
-    .error-message.show {
-        opacity: 1;
-    }
-
-    /* ===== MAIN CARD ===== */
-    .card {
-        width: 100%;
-        min-height: 100vh;
-        background: linear-gradient(180deg, #205f4b 0%, #1f5c4b 30%, #1e574c 60%, #1d534d 80%, #1e514e 100%);
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-    }
-
-    /* ===== DECORATIVE BACKGROUND ELEMENTS ===== */
-    .bg-curves {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 60%;
-        pointer-events: none;
-        overflow: hidden;
-    }
-
-    .bg-curves svg {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-    }
-
-    /* ===== CALLIGRAPHY SECTION ===== */
-    .calligraphy-section {
-        padding-top: 7rem;
-        display: flex;
-        justify-content: center;
-        padding-bottom: 3vh;
-        position: relative;
-        z-index: 2;
-    }
-
-    .calligraphy-img {
-        height: auto;
-        text-align: center;
-        max-width: 75vw;
-        display: block;
-        mix-blend-mode: screen;
-        filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.18));
-        pointer-events: none;
-        user-select: none;
-    }
-
-    /* ===== TEXT SECTION ===== */
-    .text-section {
-        flex: 0 0 auto;
-        padding: 2vh 8% 0 8%;
-        text-align: center;
-        position: relative;
-        z-index: 2;
-    }
-
-    .text-line {
-        font-family: 'RamadanFont', sans-serif; /* تأكيد استخدام الخط */
-        font-size: clamp(20px, 4vw, 28px); /* زيادة حجم الخط قليلاً ليطابق الصورة */
-        line-height: 1.6;
-        color: #fefffa;
-        font-weight: bold; /* سمك الخط */
-        letter-spacing: 0; /* إلغاء التباعد الزائد */
-    }
-
-    .text-line.gold {
-        color: #d6c07a; /* لون ذهبي أكثر دقة */
-    }
-
-    /* Dynamic personalized message */
-    .dynamic-section {
-        padding: 3vh 8% 0 8%;
-        text-align: center;
-        position: relative;
-        z-index: 2;
-        opacity: 0;
-        transform: translateY(15px);
-        transition: all 0.8s ease;
-    }
-
-    .dynamic-section.show {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    .dynamic-text {
-        font-family: 'RamadanFont', sans-serif;
-        font-size: clamp(20px, 4vw, 28px); /* نفس حجم النص الأساسي */
-        line-height: 1.6;
-        color: #fefffa;
-        font-weight: bold;
-        letter-spacing: 0;
-    }
-
-    .user-name {
-        font-family: 'RamadanFont', sans-serif;
-        color: #d4af37;
-        display: inline;
-        font-weight: bold;
-        text-shadow: 0 0 10px rgba(212, 175, 55, 0.3); /* إضافة وهج بسيط */
-    }
-
-    /* ===== SPACER ===== */
-    .spacer {
-        flex: 1 1 auto;
-        min-height: 5vh;
-    }
-
-    /* ===== SEPARATOR LINE ===== */
-    .separator {
-        width: 92%;
-        margin: 0 auto;
-        height: 2px;
-        background: linear-gradient(90deg, transparent 0%, #8f8f50 10%, #8f8f50 90%, transparent 100%);
-        opacity: 0.6;
-        position: relative;
-        z-index: 2;
-    }
-
-    /* ===== FOOTER ===== */
-    .footer {
-        flex: 0 0 auto;
-        padding: 25px 5% 30px 5%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 40px;
-        position: relative;
-        z-index: 2;
-    }
-
-    .footer-group {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-    }
-
-    /* MOH Logo */
-    .moh-logo svg {
-        width: 70px;
-        height: 70px;
-    }
-
-    .moh-text {
-        text-align: center;
-    }
-
-    .moh-text-ar {
-        font-family: 'RamadanFont', Arial, sans-serif;
-        color: #fff;
-        font-size: 22px;
-        font-weight: bold;
-        line-height: 1.4;
-    }
-
-    .moh-text-en {
-        font-family: Arial, sans-serif;
-        color: rgba(255, 255, 255, 0.7);
-        font-size: 13px;
-        direction: ltr;
-        font-weight: normal;
-    }
-
-    /* NHEOC Logo */
-    .nheoc-group {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .nheoc-logo svg {
-        width: 60px;
-        height: 60px;
-    }
-
-    .nheoc-text-block {
-        text-align: left;
-        direction: ltr;
-    }
-
-    .nheoc-title {
-        font-family: Arial, Helvetica, sans-serif;
-        color: #fff;
-        font-size: 20px;
-        font-weight: bold;
-        letter-spacing: 2px;
-    }
-
-    .nheoc-subtitle-ar {
-        font-family: 'RamadanFont', Arial, sans-serif;
-        color: rgba(255, 255, 255, 0.6);
-        font-size: 10px;
-        direction: rtl;
-        font-weight: normal;
-    }
-
-    .nheoc-subtitle-en {
-        font-family: Arial, sans-serif;
-        color: rgba(255, 255, 255, 0.6);
-        font-size: 9px;
-        direction: ltr;
-    }
-
-    /* ===== ANIMATIONS ===== */
-    @keyframes slideUp {
-        from {
+        /* ===== زر التحميل الجديد ===== */
+        .download-btn-container {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
             opacity: 0;
-            transform: translateY(40px);
+            visibility: hidden;
+            transition: all 0.5s ease;
         }
-        to {
+        .download-btn-container.show {
             opacity: 1;
-            transform: translateY(0);
+            visibility: visible;
+            bottom: 40px; /* حركة بسيطة عند الظهور */
         }
-    }
+        .download-btn {
+            background: #d6c07a;
+            color: #1e514e;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-family: 'RamadanFont', sans-serif;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .download-btn:hover {
+            background: #fff;
+            transform: scale(1.05);
+        }
 
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 600px) {
+        /* ===== INPUT OVERLAY ===== */
+        .input-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6); z-index: 1000;
+            display: flex; justify-content: center; align-items: center;
+            backdrop-filter: blur(5px); transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        .input-overlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        .input-box {
+            background: #1f5e4b; border: 2px solid rgba(143, 143, 80, 0.5);
+            border-radius: 20px; padding: 50px 40px; text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            max-width: 500px; width: 90%; animation: slideUp 0.6s ease-out;
+        }
+        .input-box h2 {
+            font-family: 'RamadanFont', sans-serif; color: #fff;
+            font-size: clamp(18px, 3vw, 30px); margin-bottom: 30px; font-weight: bold;
+        }
+        .input-field {
+            font-family: 'RamadanFont', sans-serif; width: 100%; padding: 16px 20px;
+            font-size: 24px; border: 2px solid rgba(143, 143, 80, 0.6);
+            border-radius: 12px; text-align: center; direction: rtl;
+            background: rgba(255, 255, 255, 0.1); color: #fff;
+            transition: all 0.3s ease; outline: none; font-weight: bold;
+        }
+        .input-field::placeholder { color: rgba(255, 255, 255, 0.5); font-weight: normal; }
+        .input-field:focus {
+            border-color: #8f8f50; box-shadow: 0 0 15px rgba(143, 143, 80, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        .submit-btn {
+            font-family: 'RamadanFont', sans-serif; margin-top: 20px;
+            padding: 16px 50px; font-size: 24px; background: #8f8f50;
+            color: #fff; border: none; border-radius: 12px; cursor: pointer;
+            transition: all 0.3s ease; font-weight: bold;
+        }
+        .submit-btn:hover {
+            background: #a5a55e; transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(143, 143, 80, 0.4);
+        }
+        .error-message {
+            font-family: 'RamadanFont', sans-serif; color: #ff8888;
+            font-size: 18px; margin-top: 12px; opacity: 0;
+            transition: opacity 0.3s ease; height: 25px;
+        }
+        .error-message.show { opacity: 1; }
+
+        /* ===== MAIN CARD ===== */
+        .card {
+            width: 100%; min-height: 100vh;
+            background: linear-gradient(180deg, #205f4b 0%, #1f5c4b 30%, #1e574c 60%, #1d534d 80%, #1e514e 100%);
+            position: relative; display: flex; flex-direction: column; overflow: hidden;
+        }
+
+        .bg-curves { position: absolute; top: 0; left: 0; width: 100%; height: 60%; pointer-events: none; overflow: hidden; }
+        .bg-curves svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
         .calligraphy-section {
-            padding-top: 5vh;
-            padding-bottom: 2vh;
+            padding-top: 7rem; display: flex; justify-content: center;
+            padding-bottom: 3vh; position: relative; z-index: 2;
         }
-
         .calligraphy-img {
-            width: 220px;
+            height: auto; text-align: center; max-width: 75vw; display: block;
+            mix-blend-mode: screen; filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.18));
+            pointer-events: none; user-select: none;
         }
 
-        .text-section {
-            padding: 1vh 6% 0 6%;
-        }
-
-        /* تعديل حجم الخط للموبايل */
+        .text-section { flex: 0 0 auto; padding: 2vh 8% 0 8%; text-align: center; position: relative; z-index: 2; }
         .text-line {
-            font-size: 20px;
-            letter-spacing: 0;
+            font-family: 'RamadanFont', sans-serif; font-size: clamp(20px, 4vw, 28px);
+            line-height: 1.6; color: #fefffa; font-weight: bold; letter-spacing: 0;
         }
-        
-        .dynamic-text {
-            font-size: 22px;
-        }
+        .text-line.gold { color: #d6c07a; }
 
         .dynamic-section {
-            padding: 2vh 6% 0 6%;
+            padding: 3vh 8% 0 8%; text-align: center; position: relative;
+            z-index: 2; opacity: 0; transform: translateY(15px); transition: all 0.8s ease;
+        }
+        .dynamic-section.show { opacity: 1; transform: translateY(0); }
+        .dynamic-text {
+            font-family: 'RamadanFont', sans-serif; font-size: clamp(20px, 4vw, 28px);
+            line-height: 1.6; color: #fefffa; font-weight: bold; letter-spacing: 0;
+        }
+        .user-name {
+            font-family: 'RamadanFont', sans-serif; color: #d4af37;
+            display: inline; font-weight: bold; text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+
+        .spacer { flex: 1 1 auto; min-height: 5vh; }
+        .separator {
+            width: 92%; margin: 0 auto; height: 2px;
+            background: linear-gradient(90deg, transparent 0%, #8f8f50 10%, #8f8f50 90%, transparent 100%);
+            opacity: 0.6; position: relative; z-index: 2;
         }
 
         .footer {
-            flex-direction: column;
-            gap: 20px;
-            padding: 20px 5% 25px 5%;
+            flex: 0 0 auto; padding: 25px 5% 30px 5%; display: flex;
+            justify-content: center; align-items: center; gap: 40px;
+            position: relative; z-index: 2;
         }
+        .footer-group { display: flex; align-items: center; gap: 15px; }
 
-        .moh-logo svg, .nheoc-logo svg {
-            width: 50px;
-            height: 50px;
-        }
-
+        /* MOH Logo */
+        .moh-logo svg { width: 70px; height: 70px; }
+        .moh-text { text-align: center; }
         .moh-text-ar {
-            font-size: 18px;
+            font-family: 'RamadanFont', Arial, sans-serif; color: #fff;
+            font-size: 22px; font-weight: bold; line-height: 1.4;
+        }
+        .moh-text-en {
+            font-family: Arial, sans-serif; color: rgba(255, 255, 255, 0.7);
+            font-size: 13px; direction: ltr; font-weight: normal;
         }
 
+        /* NHEOC Logo */
+        .nheoc-group { display: flex; align-items: center; gap: 10px; }
+        .nheoc-logo svg { width: 60px; height: 60px; }
+        .nheoc-text-block { text-align: left; direction: ltr; }
         .nheoc-title {
-            font-size: 16px;
+            font-family: Arial, Helvetica, sans-serif; color: #fff;
+            font-size: 20px; font-weight: bold; letter-spacing: 2px;
+        }
+        .nheoc-subtitle-ar {
+            font-family: 'RamadanFont', Arial, sans-serif; color: rgba(255, 255, 255, 0.6);
+            font-size: 10px; direction: rtl; font-weight: normal;
+        }
+        .nheoc-subtitle-en {
+            font-family: Arial, sans-serif; color: rgba(255, 255, 255, 0.6);
+            font-size: 9px; direction: ltr;
         }
 
-        .input-box {
-            padding: 35px 25px;
-        }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes nameGlow { 0%, 100% { text-shadow: 0 0 5px rgba(212, 175, 55, 0.2); } 50% { text-shadow: 0 0 20px rgba(212, 175, 55, 0.5); } }
 
-        .input-box h2 {
-            font-size: 24px;
+        @media (max-width: 600px) {
+            .calligraphy-section { padding-top: 5vh; padding-bottom: 2vh; }
+            .calligraphy-img { width: 220px; }
+            .text-section { padding: 1vh 6% 0 6%; }
+            .text-line { font-size: 20px; letter-spacing: 0; }
+            .dynamic-text { font-size: 22px; }
+            .dynamic-section { padding: 2vh 6% 0 6%; }
+            .footer { flex-direction: column; gap: 20px; padding: 20px 5% 25px 5%; }
+            .moh-logo svg, .nheoc-logo svg { width: 50px; height: 50px; }
+            .moh-text-ar { font-size: 18px; }
+            .nheoc-title { font-size: 16px; }
+            .input-box { padding: 35px 25px; }
+            .input-box h2 { font-size: 24px; }
+            .input-field { font-size: 20px; }
+            .submit-btn { font-size: 20px; padding: 14px 40px; }
         }
-
-        .input-field {
-            font-size: 20px;
+        @media (min-width: 1200px) {
+            .card { max-width: 700px; margin: 0 auto; min-height: 100vh; box-shadow: 0 0 60px rgba(0, 0, 0, 0.5); }
         }
-
-        .submit-btn {
-            font-size: 20px;
-            padding: 14px 40px;
-        }
-    }
-
-    @media (min-width: 1200px) {
-        .card {
-            max-width: 700px;
-            margin: 0 auto;
-            min-height: 100vh;
-            box-shadow: 0 0 60px rgba(0, 0, 0, 0.5);
-        }
-    }
-</style>
+    </style>
 </head>
 <body>
 
     <div class="input-overlay" id="inputOverlay">
         <div class="input-box">
             <h2>تهنئة رمضان المبارك</h2>
-            <input
-                type="text"
-                id="nameInput"
-                class="input-field"
-                placeholder="اكتب اسمك هنا"
-                maxlength="30"
-                autocomplete="off"
-            />
+            <input type="text" id="nameInput" class="input-field" placeholder="اكتب اسمك هنا" maxlength="30" autocomplete="off" />
             <br>
             <button class="submit-btn" id="submitBtn">عرض التهنئة</button>
             <div class="error-message" id="errorMessage">الرجاء إدخال الاسم</div>
         </div>
+    </div>
+
+    <div class="download-btn-container" id="downloadBtnContainer">
+        <button class="download-btn" id="downloadBtn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            حفظ الصورة
+        </button>
     </div>
 
     <div class="card" id="mainCard">
@@ -480,7 +265,6 @@
                 <path d="M 0 280 Q 200 160 500 100 Q 650 70 800 130" stroke="rgba(255,255,255,0.06)" stroke-width="1.5" fill="none"/>
                 <path d="M 0 360 Q 200 220 500 160 Q 650 130 800 200" stroke="rgba(255,255,255,0.05)" stroke-width="1.5" fill="none"/>
                 <path d="M 0 440 Q 200 300 500 230 Q 650 200 800 280" stroke="rgba(255,255,255,0.04)" stroke-width="1.5" fill="none"/>
-
                 <g transform="translate(30, 180)" opacity="0.15" stroke="rgba(255,255,255,0.8)" stroke-width="1.2" fill="none">
                     <line x1="15" y1="0" x2="15" y2="30"/>
                     <rect x="5" y="30" width="20" height="20" transform="rotate(45, 15, 40)"/>
@@ -515,19 +299,18 @@
 
         <div class="dynamic-section" id="dynamicSection">
             <div class="dynamic-text">
-              <span class="user-name" id="userName"></span>  
+                <span class="user-name" id="userName"></span> 
             </div>
         </div>
 
         <div class="spacer"></div>
-
         <div class="separator"></div>
 
         <div class="footer">
-            
             <div class="footer-group">
                 <div class="moh-logo">
-                   <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="100.000000pt" height="90.000000pt" viewBox="0 0 100.000000 90.000000" preserveAspectRatio="xMidYMid meet">
+                
+                       <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="100.000000pt" height="90.000000pt" viewBox="0 0 100.000000 90.000000" preserveAspectRatio="xMidYMid meet">
                         <g transform="translate(0.000000,90.000000) scale(0.100000,-0.100000)" fill="#ffffff" stroke="none">
                             <path d="M325 730 c-3 -6 1 -7 9 -4 18 7 21 14 7 14 -6 0 -13 -4 -16 -10z"/>
                             <path d="M557 729 c7 -7 15 -10 18 -7 3 3 -2 9 -12 12 -14 6 -15 5 -6 -5z"/>
@@ -537,7 +320,7 @@
                             <path d="M371 624 c-12 -15 -21 -30 -21 -35 0 -4 -3 -15 -7 -25 -4 -11 -3 -15 4 -11 13 8 26 -20 16 -35 -3 -7 -1 -8 5 -4 7 4 12 3 12 -3 0 -24 -72 -30 -99 -8 -19 16 -115 14 -135 -2 -9 -7 -22 -11 -30 -8 -8 3 -20 -2 -28 -11 -12 -15 -11 -16 4 -4 28 22 35 -8 7 -30 -13 -11 -17 -16 -9 -12 12 7 13 5 2 -8 -10 -12 -9 -18 3 -28 13 -10 15 -9 15 10 0 12 13 35 29 51 36 36 92 39 150 9 l39 -19 39 21 c47 26 98 19 143 -18 30 -25 30 -25 57 -7 44 30 81 43 119 43 50 0 73 -15 94 -63 14 -32 20 -38 25 -25 4 9 3 23 -1 30 -5 7 -9 15 -10 18 -8 41 -75 76 -129 67 -19 -3 -49 -15 -65 -27 -17 -12 -30 -18 -30 -14 0 3 -7 1 -15 -6 -14 -12 -15 -10 -11 14 3 14 1 24 -4 21 -5 -3 -11 -1 -14 4 -4 5 -2 12 3 16 6 3 8 12 4 20 -3 8 0 15 6 15 18 0 13 36 -9 55 -19 17 -19 17 -13 -17 3 -20 0 -45 -7 -58 -10 -19 -9 -24 10 -37 15 -11 18 -19 11 -26 -20 -20 -40 11 -36 55 3 24 -2 54 -13 76 l-17 37 -3 -60 c-2 -33 -7 -64 -11 -68 -10 -10 -24 85 -15 107 11 28 -5 17 -22 -16 -10 -20 -14 -43 -10 -66 4 -25 2 -32 -5 -25 -16 16 -23 88 -10 112 16 29 7 26 -18 -5z"/>
                             <path d="M161 456 c-13 -7 -32 -30 -42 -51 -20 -41 -25 -60 -9 -35 7 12 12 12 29 -4 27 -24 128 -24 150 0 3 4 -2 4 -12 1 -14 -5 -16 -3 -8 12 6 10 7 22 3 26 -4 4 3 3 14 -3 12 -6 25 -8 29 -4 5 4 5 1 1 -5 -4 -7 -2 -13 4 -13 6 0 8 -5 4 -12 -4 -7 -3 -8 5 -4 13 9 41 -10 41 -28 0 -6 -5 -4 -10 4 -8 13 -10 13 -10 -2 0 -9 -5 -18 -12 -20 -15 -5 -19 -39 -6 -55 13 -16 90 -17 105 -2 8 8 13 8 17 0 9 -15 106 -14 106 0 0 6 7 8 16 5 18 -7 12 6 -20 44 l-21 25 26 -22 c14 -13 30 -23 37 -23 6 0 15 -7 20 -17 6 -10 16 -14 26 -10 11 5 15 3 10 -4 -5 -8 6 -9 37 -5 24 3 56 7 72 9 15 1 27 6 27 10 0 4 0 10 0 13 0 4 -7 1 -15 -6 -9 -8 -15 -9 -15 -2 0 6 9 17 20 25 27 19 17 46 -16 43 -13 -2 -27 -6 -31 -9 -3 -4 -12 -7 -20 -7 -20 0 -83 43 -83 57 0 7 -7 10 -15 7 -8 -4 -15 -1 -15 6 0 6 5 8 10 5 6 -3 10 -1 10 5 0 6 5 8 10 5 6 -3 10 -2 10 3 0 6 14 15 30 21 17 5 28 6 25 2 -3 -5 2 -12 11 -15 8 -3 12 -2 9 4 -3 6 -3 10 2 10 14 -1 39 -24 48 -45 8 -20 8 -20 13 0 5 24 -49 75 -80 75 -26 0 -102 -35 -118 -55 -9 -11 -5 -20 22 -45 52 -48 102 -72 132 -61 13 6 27 15 31 21 3 5 11 7 17 4 16 -10 -62 -54 -95 -54 -36 0 -83 24 -123 62 -27 25 -35 28 -53 19 -29 -16 -27 -22 16 -51 l37 -25 -43 -3 c-23 -2 -49 2 -57 9 -10 8 -18 8 -26 1 -7 -5 -35 -12 -62 -14 l-48 -3 41 33 40 34 -52 44 c-57 48 -123 84 -153 84 -10 -1 -30 -7 -43 -14z m49 -41 c12 14 15 14 32 -1 17 -16 17 -18 1 -36 -15 -16 -18 -17 -33 -3 -15 14 -18 14 -30 0 -11 -14 -14 -13 -25 2 -9 13 -10 22 -2 35 10 15 13 16 28 2 14 -13 18 -13 29 1z"/>
                             <path d="M347 454 c-4 -4 19 -24 49 -46 l55 -38 25 19 c26 21 23 26 -33 55 -32 16 -84 21 -96 10z"/>
-                            <path d="M520 416 c0 -2 8 -10 18 -17 15 -13 16 -12 3 4 -13 16 -21 21 -21 13z"/>
+                            <path d="M520 416 c0 -2 8 -10 18 -7 15 -13 16 -12 3 4 -13 16 -21 21 -21 13z"/>
                             <path d="M731 384 c0 -11 3 -14 6 -6 3 7 2 16 -1 19 -3 4 -6 -2 -5 -13z"/>
                         </g>
                     </svg>
@@ -550,9 +333,7 @@
 
             <div class="footer-group nheoc-group">
                 <div class="nheoc-logo">
-                  
-
-                        <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="100.000000pt" height="67.000000pt" viewBox="0 0 78.000000 67.000000" preserveAspectRatio="xMidYMid meet">
+                     <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="100.000000pt" height="67.000000pt" viewBox="0 0 78.000000 67.000000" preserveAspectRatio="xMidYMid meet">
                         <g transform="translate(0.000000,67.000000) scale(0.100000,-0.100000)" fill="#ffffff" stroke="none"> 
                             <path d="M183 628 c9 -6 9 -8 -1 -8 -21 0 -64 -37 -52 -45 16 -10 2 -25 -17 -18 -10 4 -14 2 -10 -4 4 -6 0 -14 -9 -17 -9 -4 -14 -9 -11 -13 4 -3 -1 -11 -10 -18 -12 -9 -13 -16 -6 -29 9 -16 12 -13 27 18 20 43 39 48 23 7 -6 -17 -15 -28 -19 -25 -4 3 -8 -2 -8 -11 0 -10 5 -13 12 -9 8 5 9 2 4 -12 -4 -10 -4 -15 0 -11 4 4 18 -3 31 -15 21 -20 23 -20 23 -3 0 36 43 107 83 136 22 16 45 29 50 29 6 0 -9 -13 -31 -30 -49 -35 -66 -60 -92 -131 -18 -48 -18 -55 -5 -76 9 -13 18 -23 21 -23 4 0 0 8 -7 18 -13 15 -12 16 3 4 10 -8 17 -17 16 -20 0 -4 1 -9 2 -12 1 -3 4 -18 6 -35 7 -38 23 -58 42 -50 13 5 13 3 1 -12 -9 -11 -10 -14 -1 -9 8 5 12 0 12 -14 0 -14 4 -19 13 -14 8 5 8 3 -2 -9 -11 -14 -11 -18 3 -23 9 -3 14 -9 12 -13 -5 -8 61 -7 70 1 3 4 -10 10 -30 13 -20 4 -36 11 -36 16 0 12 47 0 88 -23 19 -10 31 -14 27 -8 -9 14 8 13 24 -2 11 -10 12 -10 7 -1 -5 8 -2 11 7 7 8 -3 23 6 34 20 18 23 34 27 126 35 5 1 5 6 1 13 -4 7 -3 8 4 4 13 -8 57 12 48 22 -3 3 1 16 10 30 8 13 13 26 11 29 -3 2 -2 17 3 32 7 24 5 27 -14 26 -11 -1 -25 0 -31 4 -5 3 -17 6 -27 6 -9 0 -26 12 -38 28 -12 15 -26 27 -31 27 -11 0 -11 -58 1 -85 6 -14 7 -5 3 25 -5 44 -5 44 11 23 16 -21 16 -25 -2 -65 -16 -36 -19 -39 -20 -18 0 14 -9 51 -21 84 -11 32 -19 62 -16 66 5 8 -53 66 -59 59 -7 -7 6 -23 34 -42 13 -9 19 -17 12 -17 -10 0 -10 -5 -2 -20 20 -37 -7 -93 -55 -117 -31 -16 -84 3 -91 32 -8 33 3 63 26 70 24 8 39 -1 50 -29 7 -18 9 -18 9 -3 1 11 -9 27 -21 37 -25 20 -66 12 -90 -18 -10 -12 -10 -14 0 -8 8 5 12 0 12 -16 0 -18 -2 -20 -10 -8 -5 8 -10 10 -10 5 0 -6 5 -16 12 -23 7 -7 8 -12 4 -12 -5 0 -3 -7 4 -15 11 -13 10 -14 -6 -8 -17 6 -17 5 -5 -10 7 -9 17 -14 22 -11 5 3 9 -3 10 -13 0 -10 3 -13 6 -6 5 15 49 7 73 -12 8 -7 22 -12 32 -12 13 0 14 4 5 19 -7 10 -13 14 -15 8 -4 -12 -22 -3 -22 11 0 6 4 8 9 5 4 -3 17 4 27 15 10 11 23 17 31 15 9 -4 11 3 7 27 l-6 32 21 -39 c21 -40 18 -59 -13 -85 -9 -8 -13 -17 -11 -22 8 -12 -44 -36 -90 -43 -29 -4 -33 -3 -15 3 19 6 11 8 -31 7 -33 -1 -52 -4 -45 -9 7 -6 6 -7 -4 -4 -8 2 -14 10 -12 16 1 6 -3 11 -8 11 -6 0 -10 8 -8 17 2 12 -3 17 -14 15 -20 -3 -30 11 -35 51 -1 17 -12 40 -23 52 -11 12 -20 25 -20 31 0 5 5 2 11 -6 8 -11 9 -2 6 34 -3 27 -1 43 3 37 5 -9 9 -8 14 4 9 24 8 27 -6 19 -8 -5 -6 2 3 16 19 29 95 90 112 90 7 0 3 -7 -7 -15 -26 -19 -7 -19 20 0 12 8 31 13 42 10 15 -3 19 0 15 12 -3 8 -9 11 -12 6 -8 -11 -54 -15 -47 -4 3 5 -2 8 -12 7 -10 0 -16 5 -14 13 2 11 -4 10 -25 -4 -68 -43 -93 -68 -117 -117 -16 -32 -26 -44 -26 -31 0 29 54 99 105 135 25 18 45 37 45 42 0 6 -4 5 -9 -3 -7 -11 -9 -11 -13 0 -3 9 -21 14 -51 14 -26 1 -41 -2 -34 -7z m21 -61 c-25 -22 -53 -56 -64 -76 -10 -20 -19 -30 -20 -23 0 21 20 54 59 96 31 35 32 38 9 23 -32 -20 -38 -21 -38 -7 0 14 35 27 71 27 28 0 28 -1 -17 -40z m396 -257 c-15 -52 -69 -128 -79 -111 -5 7 -23 2 -56 -14 -50 -26 -91 -30 -135 -14 -19 7 -15 7 18 4 66 -8 121 11 169 60 24 23 43 38 43 33 0 -23 20 6 26 37 3 19 10 35 14 35 5 0 5 -13 0 -30z m5 -56 c-15 -30 -31 -54 -36 -54 -6 0 -2 12 9 28 11 15 26 47 33 72 8 27 15 38 17 27 2 -10 -8 -43 -23 -73z m44 27 c-7 -23 -18 -46 -26 -52 -17 -15 -17 -8 2 27 8 16 15 36 15 45 0 9 3 19 7 22 13 14 14 -2 2 -42z m-179 -121 c0 -5 -10 -10 -22 -9 -22 0 -22 1 -3 9 11 5 21 9 23 9 1 1 2 -3 2 -9z" class=""></path> 
                             <path d="M543 248 c-23 -30 -24 -41 -2 -21 12 12 20 25 17 28 -3 3 -10 0 -15 -7z"></path> 
@@ -582,6 +363,8 @@
         const inputOverlay = document.getElementById('inputOverlay');
         const dynamicSection = document.getElementById('dynamicSection');
         const userName = document.getElementById('userName');
+        const downloadBtnContainer = document.getElementById('downloadBtnContainer');
+        const downloadBtn = document.getElementById('downloadBtn');
 
         // Submit on Enter key
         nameInput.addEventListener('keypress', function(e) {
@@ -610,14 +393,43 @@
             // Set the name
             userName.textContent = name;
 
-            // Hide the input overlay with animation
+            // Hide the input overlay
             inputOverlay.classList.add('hidden');
 
-            // Show the dynamic greeting after overlay fades
+            // Show the dynamic greeting
             setTimeout(() => {
                 dynamicSection.classList.add('show');
+                // Show the download button after card is revealed
+                downloadBtnContainer.classList.add('show');
             }, 600);
         }
+
+        // --- Download Functionality ---
+        downloadBtn.addEventListener('click', function() {
+            const card = document.getElementById('mainCard');
+            
+            // Hide the download button momentarily so it doesn't get captured (just in case)
+            downloadBtnContainer.style.opacity = '0';
+
+            html2canvas(card, {
+                scale: 3, // High resolution
+                useCORS: true, // Handle cross-origin images
+                backgroundColor: null // Transparent background if needed
+            }).then(canvas => {
+                // Create download link
+                const link = document.createElement('a');
+                link.download = `تهنئة-رمضان-${nameInput.value.trim()}.png`;
+                link.href = canvas.toDataURL("image/png");
+                link.click();
+
+                // Show button again
+                downloadBtnContainer.style.opacity = '1';
+            }).catch(err => {
+                console.error("Error generating image:", err);
+                alert("حدث خطأ أثناء تحميل الصورة. يرجى المحاولة مرة أخرى.");
+                downloadBtnContainer.style.opacity = '1';
+            });
+        });
     </script>
 </body>
 </html>
