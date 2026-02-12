@@ -296,7 +296,7 @@
 
         .user-name {
             font-family: 'RamadanFont', sans-serif;
-            color: #d4af37;
+            color: #ffffff;
             display: inline;
             font-weight: bold;
             text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
@@ -307,20 +307,39 @@
             min-height: 5vh;
         }
 
-        .separator {
+        .name-on-line {
             width: 92%;
             margin: 0 auto;
-            height: 2px;
-            background: linear-gradient(90deg, transparent 0%, #8f8f50 10%, #8f8f50 90%, transparent 100%);
-            opacity: 0.6;
             position: relative;
             z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .name-on-line::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1.5px;
+            background: linear-gradient(90deg, transparent 0%, rgba(143, 143, 80, 0.6) 10%, rgba(143, 143, 80, 0.6) 90%, transparent 100%);
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+
+        .name-on-line .dynamic-section {
+            position: relative;
+            z-index: 2;
+            background: #1d534d;
+            padding: 5px 20px;
         }
 
         .footer {
             flex: 0 0 auto;
             display: flex;
-            justify-content: space-around;    
+            justify-content: space-around;
             position: relative;
             z-index: 2;
         }
@@ -457,9 +476,8 @@
             }
 
             .footer {
-                flex-direction: column;
-                gap: 20px;
-                padding: 20px 5% 25px 5%;
+
+                
             }
 
             .moh-logo svg,
@@ -575,14 +593,15 @@
             <div class="text-line">وصحـــــــة وسلامــــــة</div>
         </div>
 
-        <div class="dynamic-section" id="dynamicSection">
-            <div class="dynamic-text">
-                <span class="user-name" id="userName"></span>
+        <div class="spacer"></div>
+
+        <div class="name-on-line">
+            <div class="dynamic-section" id="dynamicSection">
+                <div class="dynamic-text">
+                    <span class="user-name" id="userName"></span>
+                </div>
             </div>
         </div>
-
-        <div class="spacer"></div>
-        <div class="separator"></div>
 
         <div class="footer">
             <img src="mins.svg" alt="Ministry Health" class="footer-img">
@@ -639,30 +658,84 @@
         }
 
         // --- Download Functionality ---
-        downloadBtn.addEventListener('click', function () {
+        downloadBtn.addEventListener('click', async function () {
             const card = document.getElementById('mainCard');
-
-            // Hide the download button momentarily so it doesn't get captured (just in case)
             downloadBtnContainer.style.opacity = '0';
 
-            html2canvas(card, {
-                scale: 3, // High resolution
-                useCORS: true, // Handle cross-origin images
-                backgroundColor: null // Transparent background if needed
-            }).then(canvas => {
-                // Create download link
+            try {
+                // Convert SVG <img> elements to <canvas> so html2canvas can capture them
+                const svgImages = card.querySelectorAll('img[src$=".svg"]');
+                const replacements = [];
+
+                for (const img of svgImages) {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    
+                    // Fetch SVG and create a blob URL for proper rendering
+                    const resp = await fetch(img.src);
+                    const svgText = await resp.text();
+                    const blob = new Blob([svgText], { type: 'image/svg+xml;charset=utf-8' });
+                    const url = URL.createObjectURL(blob);
+
+                    // Draw SVG onto a canvas at high resolution
+                    const tempImg = new Image();
+                    await new Promise((resolve, reject) => {
+                        tempImg.onload = resolve;
+                        tempImg.onerror = reject;
+                        tempImg.src = url;
+                    });
+
+                    const scale = 3;
+                    canvas.width = tempImg.naturalWidth * scale;
+                    canvas.height = tempImg.naturalHeight * scale;
+                    canvas.style.width = img.offsetWidth + 'px';
+                    canvas.style.height = img.offsetHeight + 'px';
+                    canvas.style.display = 'inline-block';
+                    canvas.style.verticalAlign = 'middle';
+                    ctx.drawImage(tempImg, 0, 0, canvas.width, canvas.height);
+
+                    URL.revokeObjectURL(url);
+
+                    // Replace img with canvas in the DOM temporarily
+                    img.parentNode.insertBefore(canvas, img);
+                    img.style.display = 'none';
+                    replacements.push({ img, canvas });
+                }
+
+                // Small delay to let DOM settle
+                await new Promise(r => setTimeout(r, 200));
+
+                const result = await html2canvas(card, {
+                    scale: 3,
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: null,
+                    scrollY: -window.scrollY,
+                    height: card.scrollHeight,
+                    windowHeight: card.scrollHeight
+                });
+
+                // Download
                 const link = document.createElement('a');
                 link.download = `تهنئة-رمضان-${nameInput.value.trim()}.png`;
-                link.href = canvas.toDataURL("image/png");
+                link.href = result.toDataURL('image/png');
                 link.click();
 
-                // Show button again
+                // Restore original images
+                for (const { img, canvas } of replacements) {
+                    img.style.display = '';
+                    canvas.remove();
+                }
                 downloadBtnContainer.style.opacity = '1';
-            }).catch(err => {
-                console.error("Error generating image:", err);
-                alert("حدث خطأ أثناء تحميل الصورة. يرجى المحاولة مرة أخرى.");
+
+            } catch (err) {
+                console.error('Error generating image:', err);
+                // Restore any replaced images
+                card.querySelectorAll('img[src$=".svg"]').forEach(img => img.style.display = '');
+                card.querySelectorAll('canvas').forEach(c => { if (c.closest('.footer')) c.remove(); });
+                alert('حدث خطأ أثناء تحميل الصورة. يرجى المحاولة مرة أخرى.');
                 downloadBtnContainer.style.opacity = '1';
-            });
+            }
         });
     </script>
 </body>
